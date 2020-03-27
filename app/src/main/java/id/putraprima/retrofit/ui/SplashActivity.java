@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import id.putraprima.retrofit.R;
 import id.putraprima.retrofit.api.helper.ServiceGenerator;
 import id.putraprima.retrofit.api.models.AppVersion;
@@ -25,6 +27,8 @@ import retrofit2.Response;
 public class SplashActivity extends AppCompatActivity {
     TextView lblAppName, lblAppTittle, lblAppVersion;
     Context context;
+    View view;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +45,7 @@ public class SplashActivity extends AppCompatActivity {
         lblAppName = findViewById(R.id.lblAppName);
         lblAppTittle = findViewById(R.id.lblAppTittle);
         lblAppVersion = findViewById(R.id.lblAppVersion);
+        view = findViewById(R.id.contextView);
         //Sembunyikan lblAppName dan lblAppVersion pada saat awal dibuka
 //        lblAppVersion.setVisibility(View.INVISIBLE);
 //        lblAppName.setVisibility(View.INVISIBLE);
@@ -52,10 +57,17 @@ public class SplashActivity extends AppCompatActivity {
                 (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
-        return isConnected;
+        if (!isConnected){
+            Toast.makeText(this,"Internet Not Connected", Toast.LENGTH_SHORT).show();
+            return !isConnected;
+        }else{
+            Toast.makeText(this,"Internet Connected", Toast.LENGTH_SHORT).show();
+            return isConnected;
+        }
+
+
     }
 
 
@@ -79,6 +91,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<AppVersion> call, Response<AppVersion> response) {
                 Toast.makeText(SplashActivity.this, response.body().getApp(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SplashActivity.this, response.body().getVersion(), Toast.LENGTH_SHORT).show();
                 //Todo : 2. Implementasikan Proses Simpan Data Yang didapat dari Server ke SharedPreferences
                 SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
                 SharedPreferences.Editor editor = preference.edit();
@@ -86,15 +99,27 @@ public class SplashActivity extends AppCompatActivity {
                 editor.putString("appVersion",response.body().getVersion());
                 editor.apply();
                 //Todo : 3. Implementasikan Proses Pindah Ke MainActivity Jika Proses getAppVersion() sukses
-                Intent i = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(i);
-                finish();
+                if (service.getAppVersion() != null){
+                    Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                    String app_name = lblAppName.getText().toString();
+                    String app_version = lblAppVersion.getText().toString();
+                    i.putExtra("app_name",app_name);
+                    i.putExtra("app_version",app_version);
+                    startActivity(i);
+                    finish();
+                }else{
+                    Toast.makeText(SplashActivity.this,"Gagal", Toast.LENGTH_SHORT).show();
+
+                }
+
             }
 
             @Override
             public void onFailure(Call<AppVersion> call, Throwable t) {
-                Toast.makeText(SplashActivity.this, "Gagal Koneksi Ke Server", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SplashActivity.this, "Gagal Koneksi Ke Server", Toast.LENGTH_SHORT).show();
                 //Todo : 4. Implementasikan Cara Notifikasi Ke user jika terjadi kegagalan koneksi ke server silahkan googling cara yang lain selain menggunakan TOAST
+                Snackbar.make(view, "Gagal Koneksi Ke Server", Snackbar.LENGTH_SHORT).show();
+
             }
         });
     }
