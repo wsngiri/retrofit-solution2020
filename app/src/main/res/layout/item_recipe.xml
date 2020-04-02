@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_margin="25dp">
+
+
+    <ImageView
+        android:id="@+id/imgRecipe"
+        android:layout_width="94dp"
+        android:layout_height="123dp"
+        android:src="@mipmap/ic_launcher"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:layout_marginTop="0dp"
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:textSize="18dp"
+        android:layout_toRightOf="@+id/imgRecipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/idTtx"
+        android:text="id"
+        android:layout_gravity="center"
+        tools:ignore="MissingConstraints" />
+
+
+    <TextView
+        android:paddingLeft="10dp"
+        android:textSize="20dp"
+        android:layout_below="@+id/idTtx"
+        android:textStyle="normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/recipeTxt"
+        android:text="recipe"
+        android:layout_centerInParent="true"
+        android:layout_toRightOf="@+id/imgRecipe"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/recipeTxt"
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:textSize="18dp"
+        android:layout_toRightOf="@+id/imgRecipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/descTxt"
+        android:text="desc"
+        android:layout_gravity="center"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/descTxt"
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:textSize="18dp"
+        android:layout_toRightOf="@+id/imgRecipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bahanTxt"
+        android:text="bahan"
+        android:layout_gravity="center"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/bahanTxt"
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:textSize="18dp"
+        android:layout_toRightOf="@+id/imgRecipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/langkahTxt"
+        android:text="langkah"
+        android:layout_gravity="center"
+        tools:ignore="MissingConstraints" />
+
+
+
+</RelativeLayout>

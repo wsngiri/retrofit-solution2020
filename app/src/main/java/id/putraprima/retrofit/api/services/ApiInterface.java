@@ -1,10 +1,13 @@
 package id.putraprima.retrofit.api.services;
 
 
+import java.util.List;
+
 import id.putraprima.retrofit.api.models.AppVersion;
 import id.putraprima.retrofit.api.models.Envelope;
 import id.putraprima.retrofit.api.models.LoginRequest;
 import id.putraprima.retrofit.api.models.LoginResponse;
+import id.putraprima.retrofit.api.models.RecipeResponse;
 import id.putraprima.retrofit.api.models.RegisterRequest;
 import id.putraprima.retrofit.api.models.RegisterResponse;
 import id.putraprima.retrofit.api.models.UpdatePasswordRequest;
@@ -16,6 +19,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -28,7 +32,7 @@ public interface ApiInterface{
     Call<LoginResponse> doLogin(@Body LoginRequest loginRequest);
 
     @GET("/api/auth/me")
-    Call<Envelope<UserInfo>> me();
+    Call<Envelope<UserInfo>> me(@Header("Authorization") String token);
 
     @POST("/api/auth/register")
     Call<Envelope<RegisterResponse>> doRegister(@Body RegisterRequest registerRequest);
@@ -40,4 +44,6 @@ public interface ApiInterface{
     Call<Envelope<UpdatePasswordResponse>> doUpatePassword(@Body UpdatePasswordRequest updatePasswordRequest);
 
 
+    @GET("api/recipe")
+    Call<Envelope<List<RecipeResponse>>> getRecipe();
 }

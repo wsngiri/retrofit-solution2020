@@ -12,7 +12,9 @@ import android.widget.Toast;
 
 import id.putraprima.retrofit.R;
 import id.putraprima.retrofit.api.helper.ServiceGenerator;
+import id.putraprima.retrofit.api.models.ApiError;
 import id.putraprima.retrofit.api.models.Envelope;
+import id.putraprima.retrofit.api.models.ErrorUtils;
 import id.putraprima.retrofit.api.models.UpdatePasswordRequest;
 import id.putraprima.retrofit.api.models.UpdatePasswordResponse;
 import id.putraprima.retrofit.api.services.ApiInterface;
@@ -44,13 +46,22 @@ public class UpdatePasswordActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Envelope<UpdatePasswordResponse>> call, Response<Envelope<UpdatePasswordResponse>> response) {
                 if (response.code() == 200){
+                    SharedPreferences.Editor editor = preference.edit();
                     Toast.makeText(UpdatePasswordActivity.this, "Update Berhasil", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(UpdatePasswordActivity.this, "Update Gagal", Toast.LENGTH_SHORT).show();
+//                    finishAffinity();
+//                    editor.remove("token");
+                    Intent intent = new Intent(UpdatePasswordActivity.this, ProfileActivity.class);
+                    startActivity(intent);
+
                 }
-                Intent intent = new Intent();
-                setResult(2, intent);
-                finish();
+                if (response.errorBody() != null){
+                    ApiError error = ErrorUtils.parseError(response);
+                    if(error.getError().getPassword() != null) {
+                        for(int i =0;i<error.getError().getPassword().size();i++) {
+                            Toast.makeText(UpdatePasswordActivity.this,  error.getError().getPassword().get(i), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
             }
 
             @Override
@@ -66,27 +77,8 @@ public class UpdatePasswordActivity extends AppCompatActivity {
         String password = passwordtxt.getText().toString();
         String passcon = passwordConTxt.getText().toString();
         updatePasswordRequest = new UpdatePasswordRequest(password, passcon);
-
-        boolean check;
-        if (password.equals("")) {
-            Toast.makeText(this, "Isi Password", Toast.LENGTH_SHORT).show();
-            check = false;
-        } else if (passcon.equals("")) {
-            Toast.makeText(this, "Isi Konfirmasi Password", Toast.LENGTH_SHORT).show();
-            check = false;
-        } else if (password.length() < 8) {
-            Toast.makeText(this, "Password harus lebih dari 7", Toast.LENGTH_SHORT).show();
-            check = false;
-        } else if (!passcon.equals(password)) {
-            Toast.makeText(this, "Konfirmasi Password tidak sama", Toast.LENGTH_SHORT).show();
-            check = false;
-        } else {
-            check = true;
-        }
-        Toast.makeText(this, "Password baru : "+password, Toast.LENGTH_SHORT).show();
-        if (check == true) {
             UpdatePassword();
-        }
+
 
     }
 }

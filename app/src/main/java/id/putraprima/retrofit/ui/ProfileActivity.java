@@ -52,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
         Toast.makeText(context, preference.getString("token",null), Toast.LENGTH_SHORT).show();
         ApiInterface service = ServiceGenerator.createService(ApiInterface.class, "Bearer "+preference.getString("token",null));
-        Call<Envelope<UserInfo>> call = service.me();
+        Call<Envelope<UserInfo>> call = service.me("Bearer"+" "+preference.getString("token", null));
         call.enqueue(new Callback<Envelope<UserInfo>>() {
             @Override
             public void onResponse(Call<Envelope<UserInfo>> call, Response<Envelope<UserInfo>> response) {
